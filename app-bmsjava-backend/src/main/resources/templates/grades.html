@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Grades List</title>
+</head>
+<body>
+    <h1>Grades</h1>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Subject</th>
+            <th>Score</th>
+        </tr>
+        <tr th:each="grade : ${grades}">
+            <td th:text="${grade.name}">Name</td>
+            <td th:text="${grade.subject}">Subject</td>
+            <td th:text="${grade.score}">Score</td>
+        </tr>
+    </table>
+</body>
+</html>
