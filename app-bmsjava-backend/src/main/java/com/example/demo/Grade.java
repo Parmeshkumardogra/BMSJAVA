@@ -1,6 +1,7 @@
 package com.example.demo;
 import java.util.*;
 public class Grade{
+
     private String name;
     private String subject;
     private String score;
@@ -38,5 +39,14 @@ public class Grade{
     }
     public String getID(){
         return this.id;
+    }
+    @Override
+    public String toString() {
+        return "Grade{" +
+            "name='" + name + '\'' +
+            ", subject='" + subject + '\'' +
+            ", score='" + score + '\'' +
+            ", id='" + id + '\'' +
+            '}';
     }
 }

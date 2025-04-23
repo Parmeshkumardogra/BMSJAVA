@@ -1,12 +1,11 @@
 package com.example.demo;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.*;
 @RestController
+
 public class ClassController{
     List<Grade> grades = new ArrayList<>();
     public ClassController() {
@@ -31,5 +30,26 @@ public class ClassController{
         errorResponse.put("status",404);
         errorResponse.put("message","Grade not found with id: " + id);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+    @PostMapping("/gradeForm")
+    public ResponseEntity<?> addGrade(@RequestBody Grade requestedData){
+        System.out.println("Received Grade object: " + requestedData.toString());
+        Map<String,Object> errors = new HashMap<>();
+        if (requestedData.getName() == null || requestedData.getName().trim().isEmpty()) {
+            errors.put("name", "Name cannot be blank");
+        }
+        if (requestedData.getSubject() == null || requestedData.getSubject().trim().isEmpty()) {
+            errors.put("subject", "Subject cannot be blank");
+        }
+        if (requestedData.getScore() == null || requestedData.getScore().trim().isEmpty()) {
+            errors.put("score", "Score cannot be blank");
+        }
+        if(!errors.isEmpty()){
+            errors.put("statusCode",400);
+            errors.put("message","bad request");
+            return ResponseEntity.badRequest().body(errors);
+        }
+        grades.add(requestedData);
+        return ResponseEntity.ok(requestedData);
     }
 }
