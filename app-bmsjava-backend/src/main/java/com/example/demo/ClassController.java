@@ -2,7 +2,10 @@ package com.example.demo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.validation.FieldError;
+import org.springframework.validation.BindingResult;
+import java.util.stream.Collectors;
+import javax.validation.Valid;
 import java.util.*;
 @RestController
 
@@ -32,23 +35,32 @@ public class ClassController{
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
     @PostMapping("/gradeForm")
-    public ResponseEntity<?> addGrade(@RequestBody Grade requestedData){
+    public ResponseEntity<?> addGrade(@Valid @RequestBody Grade requestedData, BindingResult result){
         System.out.println("Received Grade object: " + requestedData.toString());
-        Map<String,Object> errors = new HashMap<>();
-        if (requestedData.getName() == null || requestedData.getName().trim().isEmpty()) {
-            errors.put("name", "Name cannot be blank");
-        }
-        if (requestedData.getSubject() == null || requestedData.getSubject().trim().isEmpty()) {
-            errors.put("subject", "Subject cannot be blank");
-        }
-        if (requestedData.getScore() == null || requestedData.getScore().trim().isEmpty()) {
-            errors.put("score", "Score cannot be blank");
-        }
-        if(!errors.isEmpty()){
-            errors.put("statusCode",400);
-            errors.put("message","bad request");
+        System.out.println("Result binding status "+ result.hasErrors());
+        if(result.hasErrors()){
+            System.out.println("Inside has error condition!!");
+            Map<String,String> errors = result.getFieldErrors().stream().collect(Collectors.toMap(
+                FieldError::getField, // Use FieldError::getField
+                FieldError::getDefaultMessage
+            ));
             return ResponseEntity.badRequest().body(errors);
         }
+        // Map<String,Object> errors = new HashMap<>();
+        // if (requestedData.getName() == null || requestedData.getName().trim().isEmpty()) {
+        //     errors.put("name", "Name cannot be blank");
+        // }
+        // if (requestedData.getSubject() == null || requestedData.getSubject().trim().isEmpty()) {
+        //     errors.put("subject", "Subject cannot be blank");
+        // }
+        // if (requestedData.getScore() == null || requestedData.getScore().trim().isEmpty()) {
+        //     errors.put("score", "Score cannot be blank");
+        // }
+        // if(!errors.isEmpty()){
+        //     errors.put("statusCode",400);
+        //     errors.put("message","bad request");
+        //     return ResponseEntity.badRequest().body(errors);
+        // }
         grades.add(requestedData);
         return ResponseEntity.ok(requestedData);
     }

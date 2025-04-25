@@ -1,12 +1,19 @@
 package com.example.demo;
 import java.util.*;
+import javax.validation.constraints.NotBlank;
 public class Grade{
 
+    @NotBlank(message="name cannot be empty")
     private String name;
+    @NotBlank(message="subject cannot be empty")
     private String subject;
+    @NotBlank(message="subject cannot be empty")
     private String score;
     private String id;
 
+    public Grade() {
+        this.id=UUID.randomUUID().toString();
+    }
     public Grade(String name, String subject, String score){
         this.id=UUID.randomUUID().toString();
         this.name=name;
