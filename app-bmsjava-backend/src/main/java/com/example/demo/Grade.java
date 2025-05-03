@@ -7,7 +7,7 @@ public class Grade{
     private String name;
     @NotBlank(message="subject cannot be empty")
     private String subject;
-    @NotBlank(message="subject cannot be empty")
+    @Score(message="score must be A to F")
     private String score;
     private String id;
 
